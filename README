@@ -1,0 +1,7 @@
+                    vector.h -- General informations --
+
+Vector.h is a simple header file which try to mimic the std::vector of C++. At
+the moment the usage of vector.h is similar to the use of an explicit template
+instantiation of a std::vector.
+
+Take a look at the tests and examples.
