@@ -17,6 +17,15 @@ int pred(size_t const *a, size_t const *b)
     return !(*a >= *b);
 }
 
+/**
+ *
+ * This test will insert random value in the vector at a not so random place and
+ * erase them all in a random order. This kind of test is performance critical
+ * as there is a lot of memory move and memory streaming for searching the right
+ * insert point and insert the value.
+ *
+**/
+
 int	main(int argc, char *argv[])
 {
     struct vector_size vs;
