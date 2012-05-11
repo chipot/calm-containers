@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, PICHOT Fabien Paul Leonard <pichot.fabien@gmail.com>
- * Permission to use, copy, modify, and/or distribute this software for any purpose
- * with or without fee is hereby granted, provided that the above copyright notice
- * and this permission notice appear in all copies.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
- * OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
- * THIS SOFTWARE.
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
 **/
 
 #include <stdlib.h>
@@ -32,8 +32,6 @@
 
 #ifndef VECTOR_PREFIX
 #error "You must define the macro VECTOR_PREFIX prior to include vector.h"
-#else
-#define prefix VECTOR_PREFIX
 #endif
 
 #ifndef TYPE_SPECIFIER
@@ -280,10 +278,10 @@ specifier type *vector_(find_if)(struct vector_name *v, type *ptr,
        it != ite;
        it = vector_(next)(it)) {
     if (cmp(it, ptr)) {
-      break;
+      return it;
     }
   }
-  return it;
+  return ite;
 }
 
 #ifdef VECTOR_TYPE_SCALAR
@@ -298,14 +296,17 @@ specifier type * vector_(find)(struct vector_name *v, type *ptr)
        it != ite;
        it = vector_(next)(it)) {
     if (it == ptr) {
-      break;
+      return it;
     }
   }
-  return it;
+  return ite;
 }
 
 #endif
 
 #undef type
 #undef specifier
-#undef prefix
+#ifndef VECTOR_DEV_MODE
+#  undef vector_
+#  undef vector_name
+#endif
