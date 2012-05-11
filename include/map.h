@@ -75,11 +75,19 @@ map_specifier void map_(init)(struct map_name *m)
   vector_(init)(&m->vec);
 }
 
+#ifdef MAP_KEY_CMP
+map_specifier int cmp_name(struct map_pair_name const *a, struct map_pair_name const *b)
+{
+  return MAP_KEY_CMP(&a->key, &b->key);
+}
+
+#else
+
 map_specifier int cmp_name(struct map_pair_name const *a, struct map_pair_name const *b)
 {
   return a->key == b->key;
 }
-
+#endif
 map_specifier void map_(insert)(struct map_name *m, key_type k, value_type v)
 {
   struct map_pair_name *it;

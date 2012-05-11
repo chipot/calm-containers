@@ -15,9 +15,9 @@ int    main(int argc, const char *argv[])
     int const *it;
 
     m_di_init(&m);
-    m_di_insert(&m, 0.5, 1);
-    m_di_insert(&m, 1.5, 2);
-    m_di_insert(&m, 2.5, 3);
+    m_di_insert(&m, 0.4, 1);
+    m_di_insert(&m, 2.5, 1);
+    m_di_insert(&m, 0.4, 1);
     it = m_di_access(&m, 2.5);
     if (it == NULL)
         return 1;

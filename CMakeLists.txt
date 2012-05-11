@@ -20,6 +20,9 @@ add_executable(test4
 add_executable(test5
     test/test5.c)
 
+add_executable(test6
+    test/test6.c)
+
 add_test(TestInsertErase ./test1 5000)
 add_test(TestInsertSortedErase ./test2 5000)
 add_test(TestMultiple ./test3)
