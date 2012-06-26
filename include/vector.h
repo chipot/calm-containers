@@ -80,9 +80,13 @@ specifier type *vector_(frontref)(struct vector_name *v);
 specifier type *vector_(backref)(struct vector_name *v);
 specifier type *vector_(find_if)(struct vector_name *v, type *val,
                                       int (*)(type const *, type const *));
-
 #ifdef VECTOR_TYPE_SCALAR
 specifier type *vector_(find)(struct vector_name *v, type *val);
+specifier void vector_(foreach)(struct vector_name *v,
+                                      void (*)(type));
+#else
+specifier void vector_(foreach)(struct vector_name *v,
+                                      void (*)(type const *));
 #endif
 
 
@@ -302,6 +306,37 @@ specifier type * vector_(find)(struct vector_name *v, type *ptr)
   return ite;
 }
 
+specifier void vector_(foreach)(struct vector_name *v,
+                                      void (*each)(type))
+{
+    type *it = NULL;
+    type *ite = NULL;
+
+  for (it = vector_(begin)(v),
+       ite = vector_(end)(v);
+       it != ite;
+       it = vector_(next)(it))
+  {
+      each(*it);
+  }
+}
+
+#else
+
+specifier void vector_(foreach)(struct vector_name *v,
+                                      void (*each)(type const *))
+{
+    type *it = NULL;
+    type *ite = NULL;
+
+  for (it = vector_(begin)(v),
+       ite = vector_(end)(v);
+       it != ite;
+       it = vector_(next)(it))
+  {
+      each((type const *)it);
+  }
+}
 #endif
 
 #undef type

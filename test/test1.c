@@ -58,13 +58,8 @@ int	main(int argc, char *argv[])
         }
         for (size_t i = 0; i < num; ++i)
         {
-            size_t *it = v_size_begin(&vs);
-            for (size_t val = random() % vs.size;
-                 val != 0;
-                 --val, it = v_size_next(it))
-            {
-                v_size_erase(&vs, it);
-            }
+            size_t val = random() % vs.size;
+            v_size_erase(&vs, v_size_atref(&vs, val));
         }
         if (vs.size != 0)
             return 1;

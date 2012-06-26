@@ -23,8 +23,17 @@ add_executable(test5
 add_executable(test6
     test/test6.c)
 
+add_executable(test7
+    test/test7.c)
+
+add_executable(test8
+    test/test8.c)
+
 add_test(TestInsertErase ./test1 5000)
 add_test(TestInsertSortedErase ./test2 5000)
 add_test(TestMultiple ./test3)
 add_test(TestMapInsert ./test4)
 add_test(TestMapRemove ./test5)
+add_test(Testwtf ./test6)
+add_test(TestForEach ./test7)
+add_test(TestForEachStruct ./test8)
