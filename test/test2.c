@@ -78,7 +78,7 @@ int	main(int argc, char *argv[])
 	    size_t *it = v_size_begin(&vs);
 	    for (size_t val = random() % vs.size;
 		 val != 0;
-		 --val, it = v_size_next(it));
+		 --val, it = v_size_next(it))
 	    {
 		v_size_erase(&vs, it);
 	    }

@@ -306,7 +306,12 @@ specifier type * vector_(find)(struct vector_name *v, type *ptr)
 
 #undef type
 #undef specifier
+
 #ifndef VECTOR_DEV_MODE
-#  undef vector_
-#  undef vector_name
+# undef vector_
+# undef vector_name
+# undef DEFAULT_ALLOC_SIZE
+# undef VECTOR_TYPE
+# undef VECTOR_PREFIX
+# undef VECTOR_TYPE_SCALAR
 #endif

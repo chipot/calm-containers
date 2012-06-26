@@ -159,8 +159,16 @@ map_specifier void map_(delete)(struct map_name *m)
   vector_(delete)(&m->vec);
 }
 
-#undef VECTOR_PREFIX
+#undef vector_
+#undef vector_name
+#undef DEFAULT_ALLOC_SIZE
 #undef VECTOR_TYPE
+#undef VECTOR_PREFIX
+#undef VECTOR_TYPE_SCALAR
+#undef MAP_KEY_TYPE
+#undef MAP_KEY_CMP
+#undef MAP_VALUE_TYPE
+#undef MAP_PREFIX
 #undef map_specifier
 #undef map_
 #undef map_name
