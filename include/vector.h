@@ -13,10 +13,23 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 **/
 
+#ifdef __cplusplus
+
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <limits>
+
+extern "C" {
+
+#else
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <limits.h>
+
+#endif
 
 #ifndef DEFAULT_ALLOC_SIZE
 #define default_alloc_size 64
@@ -136,7 +149,7 @@ specifier struct vector_name *vector_(new)(void)
 {
     struct vector_name *v = NULL;
 
-    v = malloc(sizeof(struct vector_name));
+    v = (struct vector_name *)malloc(sizeof(struct vector_name));
     vector_(init)(v);
     return v;
 }
@@ -196,7 +209,7 @@ specifier int vector_(resize)(struct vector_name *v, size_t size)
     tmpptr = realloc(v->vec, next_alloc_size);
     if (tmpptr != NULL)
     {
-      v->vec = tmpptr;
+      v->vec = (type *)tmpptr;
       v->alloc_size = next_alloc_size / sizeof(type);
       return 0;
     }
@@ -467,4 +480,8 @@ specifier void vector_(foreach_ctx)(struct vector_name *v,
 # undef VECTOR_PREFIX
 # undef VECTOR_TYPE_SCALAR
 # undef VECTOR_FORWARD
+#endif
+
+#ifdef __cplusplus
+}
 #endif
