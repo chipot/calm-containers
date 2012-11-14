@@ -60,19 +60,25 @@ struct map_pair_name {
 #include "vector.h"
 
 struct map_name {
-  struct vector_name vec;
+  struct vector_name *vec;
 };
 
-map_specifier void map_(init)(struct map_name *m);
-map_specifier void map_(insert)(struct map_name *m, key_type k, value_type v);
+map_specifier struct map_name *map_(new)(void);
+map_specifier value_type *map_(insert)(struct map_name *m, key_type k, value_type v);
 map_specifier value_type const *map_(access)(struct map_name *m, key_type k);
 map_specifier value_type *map_(find)(struct map_name *m, key_type k);
 map_specifier void map_(delete)(struct map_name *m);
 map_specifier void map_(remove)(struct map_name *m, key_type k);
 
-map_specifier void map_(init)(struct map_name *m)
+map_specifier struct map_name *map_(new)(void)
 {
-  vector_(init)(&m->vec);
+    struct map_name *tmp;
+
+    tmp = (struct map_name *)malloc(sizeof(struct map_name));
+    if (tmp == NULL)
+        return NULL;
+    tmp->vec = vector_(new)();
+    return tmp;
 }
 
 #ifdef MAP_KEY_CMP
@@ -83,53 +89,54 @@ map_specifier int cmp_name(struct map_pair_name const *a, struct map_pair_name c
 
 #else
 
-map_specifier int cmp_name(struct map_pair_name const *a, struct map_pair_name const *b)
+map_specifier int cmp_name(struct map_pair_name const *a, void *c)
 {
-  return a->key == b->key;
+    struct map_pair_name *b = (struct map_pair_name *)c;
+
+    return a->key == b->key;
 }
 #endif
-map_specifier void map_(insert)(struct map_name *m, key_type k, value_type v)
+map_specifier value_type *map_(insert)(struct map_name *m, key_type k, value_type v)
 {
   struct map_pair_name *it;
-  struct map_pair_name pair = {
-    .key = k,
-    .value = v,
-  };
+  struct map_pair_name pair;
+  
+  pair.key = k;
+  pair.value = v;
 
-  it = vector_(find_if)(&m->vec, &pair, cmp_name);
-  if (it == vector_(end)(&m->vec))
-    vector_(push)(&m->vec, &pair); // A copy is made inside, so don't worry !
+  it = vector_(find_if)(m->vec, cmp_name, &pair);
+  if (it == vector_(end)(m->vec))
+    vector_(push)(m->vec, &pair); // A copy is made inside, so don't worry !
   else
   {
     it->value = v;
   }
+  return &it->value;
 }
 
 map_specifier void map_(remove)(struct map_name *m, key_type k)
 {
   struct map_pair_name *it;
-  struct map_pair_name pair = {
-    .key = k,
-  };
+  struct map_pair_name pair;
 
-  it = vector_(find_if)(&m->vec, &pair, cmp_name);
-  if (it == vector_(end)(&m->vec))
+  pair.key = k;
+  it = vector_(find_if)(m->vec, cmp_name, &pair);
+  if (it == vector_(end)(m->vec))
     return;
   else
   {
-    vector_(erase)(&m->vec, it);
+    vector_(erase)(m->vec, it);
   }
 }
 
 map_specifier value_type const *map_(access)(struct map_name *m, key_type k)
 {
-  struct map_pair_name search = {
-    .key = k,
-  };
+  struct map_pair_name search;
   struct map_pair_name *it;
 
-  it = vector_(find_if)(&m->vec, &search, cmp_name);
-  if (it == vector_(end)(&m->vec))
+  search.key = k;
+  it = vector_(find_if)(m->vec, cmp_name, &search);
+  if (it == vector_(end)(m->vec))
     return NULL;
   else
     return &it->value;
@@ -137,13 +144,12 @@ map_specifier value_type const *map_(access)(struct map_name *m, key_type k)
 
 map_specifier value_type *map_(find)(struct map_name *m, key_type k)
 {
-  struct map_pair_name search = {
-    .key = k,
-  };
+  struct map_pair_name search;
   struct map_pair_name *it;
 
-  it = vector_(find_if)(&m->vec, &search, cmp_name);
-  if (it == vector_(end)(&m->vec))
+  search.key = k;
+  it = vector_(find_if)(m->vec, cmp_name, &search);
+  if (it == vector_(end)(m->vec))
     return NULL;
   else
     return &it->value;
@@ -151,12 +157,12 @@ map_specifier value_type *map_(find)(struct map_name *m, key_type k)
 
 map_specifier int map_(count)(struct map_name *m)
 {
-  return m->vec.size;
+  return m->vec->size;
 }
 
 map_specifier void map_(delete)(struct map_name *m)
 {
-  vector_(delete)(&m->vec);
+  vector_(delete)(m->vec);
 }
 
 #undef vector_
