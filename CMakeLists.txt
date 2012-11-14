@@ -2,38 +2,14 @@ project(vector)
 cmake_minimum_required(VERSION 2.8)
  
 include_directories(include)
-
 enable_testing()
 
-add_executable(test1
-    test/test1.c)
+file(GLOB ALL_TESTS test/*.c)
 
-add_executable(test2
-    test/test2.c)
-
-add_executable(test3
-    test/test3.c)
-
-add_executable(test4
-    test/test4.c)
-
-add_executable(test5
-    test/test5.c)
-
-add_executable(test6
-    test/test6.c)
-
-add_executable(test7
-    test/test7.c)
-
-add_executable(test8
-    test/test8.c)
-
-add_test(TestInsertErase ./test1 5000)
-add_test(TestInsertSortedErase ./test2 5000)
-add_test(TestMultiple ./test3)
-add_test(TestMapInsert ./test4)
-add_test(TestMapRemove ./test5)
-add_test(Testwtf ./test6)
-add_test(TestForEach ./test7)
-add_test(TestForEachStruct ./test8)
+foreach(SOURCE_FILE ${ALL_TESTS})
+        string(REPLACE ".c" "" WO_SUFFIX ${SOURCE_FILE})
+        string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/ "" SRC_BASENAME ${SOURCE_FILE})
+        string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/test/ "" BIN_BASENAME ${WO_SUFFIX})
+        add_executable(${BIN_BASENAME} ${SRC_BASENAME})
+        add_test("test_${BIN_BASENAME}" ${BIN_BASENAME})
+endforeach(SOURCE_FILE)

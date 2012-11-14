@@ -23,12 +23,10 @@
 #define VECTOR_PREFIX size
 #define VECTOR_TYPE_SCALAR
 #include "vector.h"
-#undef VECTOR_TYPE
-#undef VECTOR_PREFIX
-#undef VECTOR_TYPE_SCALAR
 
-int pred(size_t const *a, size_t const *b)
+int pred(size_t const *a, void *ctx)
 {
+    size_t const *b = (size_t *)ctx;
     return (*a >= *b);
 }
 
@@ -43,44 +41,53 @@ int pred(size_t const *a, size_t const *b)
  * right order of the elements.
  **/
 
+int
+make_test(struct vector_size *vs, size_t num)
+{
+    for (size_t i = 0; i < num; ++i)
+    {
+        size_t val = random() % num;
+        size_t *it = v_size_find_if(vs, pred, &val);
+        v_size_insert_at(vs, it, &val);
+    }
+    for (size_t *it = v_size_begin(vs),
+         *ite = v_size_end(vs),
+         last_val = *it;
+         it != ite;
+         it = v_size_next(it))
+    {
+        /*fprintf(stderr, "%lu %lu\n", last_val, *it);*/
+        if (last_val > *it)
+        {
+            /*fprintf(stderr, "at (%p) %lu is higher than %lu\n", it, last_val,
+             *it);*/
+            return 1;
+        }
+        last_val = *it;
+    }
+    for (size_t i = 0; i < num; ++i)
+    {
+        size_t val = random() % vs->size;
+        v_size_erase(vs, v_size_atref(vs, val));
+    }
+    if (vs->size != 0)
+        return 1;
+    return 0;
+}
+
 int	main(int argc, char *argv[])
 {
-    struct vector_size vs;
+    size_t num;
+    int err;
+    struct vector_size *vs;
 
-    v_size_init(&vs);
+    vs = v_size_new();
     srandom(time(NULL) * getpid());
     if (argc > 1)
-    {
-        size_t num = strtol(argv[1], 0, 10);
-        for (size_t i = 0; i < num; ++i)
-        {
-            size_t val = random() % num;
-            size_t *it = v_size_find_if(&vs, &val, pred);
-            v_size_insert(&vs, it, &val);
-        }
-        for (size_t *it = v_size_begin(&vs),
-             *ite = v_size_end(&vs),
-             last_val = *it;
-             it != ite;
-             it = v_size_next(it))
-        {
-            fprintf(stderr, "%lu %lu\n", last_val, *it);
-            if (last_val > *it)
-            {
-                fprintf(stderr, "at (%p) %lu is higher than %lu\n", it, last_val,
-                        *it);
-                return (1);
-            }
-            last_val = *it;
-        }
-        for (size_t i = 0; i < num; ++i)
-        {
-            size_t val = random() % vs.size;
-            v_size_erase(&vs, v_size_atref(&vs, val));
-        }
-        if (vs.size != 0)
-            return 1;
-    }
-    v_size_delete(&vs);
-    return (0);
+        num = strtol(argv[1], 0, 10);
+    else
+        num = 5000;
+    err = make_test(vs, num);
+    v_size_delete(vs);
+    return err;
 }

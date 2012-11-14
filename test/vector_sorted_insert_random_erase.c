@@ -23,12 +23,10 @@
 #define VECTOR_PREFIX size
 #define VECTOR_TYPE_SCALAR
 #include "vector.h"
-#undef VECTOR_TYPE
-#undef VECTOR_PREFIX
-#undef VECTOR_TYPE_SCALAR
 
-int pred(size_t const *a, size_t const *b)
+int pred(size_t const *a, void *ctx)
 {
+    size_t *b = (size_t *)ctx;
     return !(*a >= *b);
 }
 
@@ -41,29 +39,38 @@ int pred(size_t const *a, size_t const *b)
  *
 **/
 
+int
+make_test(struct vector_size *vs, size_t num)
+{
+    for (size_t i = 0; i < num; ++i)
+    {
+        size_t val = random() % num;
+        size_t *it = v_size_find_if(vs, pred, &val);
+        v_size_insert_at(vs, it, &val);
+    }
+    for (size_t i = 0; i < num; ++i)
+    {
+        size_t val = random() % vs->size;
+        v_size_erase(vs, v_size_atref(vs, val));
+    }
+    if (vs->size != 0)
+        return 1;
+    return 0;
+}
+
 int	main(int argc, char *argv[])
 {
-    struct vector_size vs;
+    int err;
+    size_t num;
+    struct vector_size *vs;
 
-    v_size_init(&vs);
+    vs = v_size_new();
     srandom(time(NULL) * getpid());
     if (argc > 1)
-    {
-        size_t num = strtol(argv[1], 0, 10);
-        for (size_t i = 0; i < num; ++i)
-        {
-            size_t val = random() % num;
-            size_t *it = v_size_find_if(&vs, &val, pred);
-            v_size_insert(&vs, it, &val);
-        }
-        for (size_t i = 0; i < num; ++i)
-        {
-            size_t val = random() % vs.size;
-            v_size_erase(&vs, v_size_atref(&vs, val));
-        }
-        if (vs.size != 0)
-            return 1;
-    }
-    v_size_delete(&vs);
-    return (0);
+        num = strtol(argv[1], 0, 10);
+    else
+        num = 5000;
+    err = make_test(vs, num);
+    v_size_delete(vs);
+    return err;
 }

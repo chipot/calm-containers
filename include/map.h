@@ -82,8 +82,10 @@ map_specifier struct map_name *map_(new)(void)
 }
 
 #ifdef MAP_KEY_CMP
-map_specifier int cmp_name(struct map_pair_name const *a, struct map_pair_name const *b)
+map_specifier int cmp_name(struct map_pair_name const *a, void *ctx)
 {
+  struct map_pair_name const *b = (struct map_pair_name const *)ctx;
+
   return MAP_KEY_CMP(&a->key, &b->key);
 }
 
@@ -95,6 +97,7 @@ map_specifier int cmp_name(struct map_pair_name const *a, void *c)
 
     return a->key == b->key;
 }
+
 #endif
 map_specifier value_type *map_(insert)(struct map_name *m, key_type k, value_type v)
 {
