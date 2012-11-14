@@ -42,13 +42,14 @@ int pred(size_t const *a, void *ctx)
 int
 make_test(struct vector_size *vs, size_t num)
 {
-    for (size_t i = 0; i < num; ++i)
+    size_t i;
+    for (i = 0; i < num; ++i)
     {
         size_t val = random() % num;
         size_t *it = v_size_find_if(vs, pred, &val);
         v_size_insert_at(vs, it, &val);
     }
-    for (size_t i = 0; i < num; ++i)
+    for (i = 0; i < num; ++i)
     {
         size_t val = random() % vs->size;
         v_size_erase(vs, v_size_atref(vs, val));

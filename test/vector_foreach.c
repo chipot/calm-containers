@@ -35,9 +35,10 @@ _each(int i)
 int    main(int argc, const char *argv[])
 {
     struct vector_i *vi;
+    int i;
 
     vi =v_i_new();
-    for (int i = 0; i < 50; ++i)
+    for (i = 0; i < 50; ++i)
     {
         v_i_push(vi, i);
     }

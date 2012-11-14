@@ -33,9 +33,10 @@ _each(struct test const *t)
 int  main(int argc, const char *argv[])
 {
     struct vector_test *vt;
+    int i;
 
     vt = v_test_new();
-    for (int i = 0; i < 200; i += 2)
+    for (i = 0; i < 200; i += 2)
     {
         struct test tmp;
 
