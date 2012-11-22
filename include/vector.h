@@ -94,7 +94,7 @@ struct vector_name {
 #endif
 
 specifier struct vector_name *vector_(new)(void);
-specifier unsigned int vector_(size)(struct vector_name *v);
+specifier size_t vector_(size)(struct vector_name *v);
 specifier void vector_(init)(struct vector_name *v);
 specifier int vector_(resize)(struct vector_name *v, size_t);
 specifier type *vector_(insert_range)(struct vector_name *, type *, type *, type *);
@@ -140,7 +140,7 @@ specifier void vector_(push)(struct vector_name *v, type *val);
 
 #ifndef VECTOR_FORWARD
 
-specifier unsigned int vector_(size)(struct vector_name *v)
+specifier size_t vector_(size)(struct vector_name *v)
 {
     return v->size;
 }
