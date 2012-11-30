@@ -422,7 +422,7 @@ specifier void vector_(foreach)(struct vector_name *v,
 }
 
 specifier void vector_(foreach_ctx)(struct vector_name *v,
-                                void (*each)(type, void *ctx),
+                                void (* const each)(type, void *ctx),
                                 void *ctx)
 {
     type *it = vector_(begin)(v);
@@ -452,7 +452,7 @@ specifier void vector_(foreach)(struct vector_name *v,
 }
 
 specifier void vector_(foreach_ctx)(struct vector_name *v,
-                                    void (*each)(type const *, void *ctx),
+                                    void (* const each)(type const *, void *ctx),
                                     void *ctx)
 {
     type *it = vector_(begin)(v);
