@@ -69,6 +69,7 @@ map_specifier value_type const *map_(access)(struct map_name *m, key_type k);
 map_specifier value_type *map_(find)(struct map_name *m, key_type k);
 map_specifier void map_(delete)(struct map_name *m);
 map_specifier void map_(remove)(struct map_name *m, key_type k);
+map_specifier size_t map_(count)(struct map_name *m);
 
 map_specifier struct map_name *map_(new)(void)
 {
@@ -158,7 +159,7 @@ map_specifier value_type *map_(find)(struct map_name *m, key_type k)
     return &it->value;
 }
 
-map_specifier int map_(count)(struct map_name *m)
+map_specifier size_t map_(count)(struct map_name *m)
 {
   return m->vec->size;
 }
