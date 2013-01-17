@@ -1,20 +1,23 @@
-                    calm containers -- General informations --
+calm containers
+===============
 
 I created calm containers because I felt like my code was yelling at me when I
-was using sys/queue.h. Also, I hate the way sys/queue.h is intrusive and ask
-you systematically about the name of the pointer member. To conclude, you just
-can not debug this kind of macro easily.
+was using BSD sys/queue.h. Also, I hate the way sys/queue.h is intrusive and
+ask you systematically about the name of the pointer member.
+Moreover, you just can not debug this kind of macro easily.
 
 Then I decided to create yet another C container library, called "calm" because
-they dont yelled at you: all the names are in lowercase.
+they don't yell at you: all the names are in lowercase.
 
--- vector.h --
+Vector
+------
 
 Vector.h is a simple header file which try to mimic the std::vector of C++. At
 the moment the usage of vector.h is similar to the use of an explicit template
 instantiation of a std::vector.
 
--- map.h --
+Map
+---
 
 Map.h is a stupid and simple implementation of an associative container. The
 implementation is currently based on vector.h and the interface is pretty poor
