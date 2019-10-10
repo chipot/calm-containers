@@ -1,8 +1,10 @@
 project(vector)
 cmake_minimum_required(VERSION 2.8)
  
-include_directories(include)
 enable_testing()
+
+add_library(calm INTERFACE)
+target_include_directories(calm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 file(GLOB ALL_TESTS test/*.c)
 
